@@ -1,0 +1,8 @@
+(defvar hover_bat false)
+(defvar hover_bright false)
+(defvar hover_vol false)
+(defvar hover_net false)
+(defvar hover_mem false)
+
+(defvar eww "~/eww/target/release/./eww -c ~/.config/eww/")
+(defvar var "`wmctrl -d | grep -w '*' | awk 'NF>1{print $NF}'`")

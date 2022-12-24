@@ -1,0 +1,166 @@
+* {
+  all: unset; //Unsets everything so you can style everything from scratch
+}
+
+
+
+$background: #1A1B26;
+$foreground: #A9B1D6;
+
+$black: #24283B;
+$gray: #565F89;
+$red: #F7768E;
+$green: #73DACA;
+$yellow: #E0AF68;
+$blue: #7AA2F7;
+$magenta: #BB9AF7;
+$cyan: #7DCFFF;
+$white: $foreground;
+
+//Global Styles
+.bar {
+  background-color: #000000;
+  color: #ffffff;
+  padding: 10px;
+  font-family: "Iosevka Nerd Font";
+  font-size: 13px;
+  border-radius: 10px;
+}
+
+// Styles on classes (see eww.yuck for more information)
+
+
+
+.metric scale trough highlight {
+  all: unset;
+  background-color: #dfbf8e;
+  color: #000000;
+  border-radius: 10px;
+}
+
+
+.metric scale trough {
+  all: unset;
+  background-color: #282828;
+  border-radius: 50px;
+  min-height: 3px;
+  min-width: 33px;
+  margin-left: 5px;
+  margin-right: 8px;
+  
+
+
+}
+.time {
+  margin-right: 100px;
+}
+
+.workspaces {
+  //margin-right: 0px;
+  //font-size: 1.0em;
+
+  .urgent {
+    color: rgb(180, 32, 32);
+  }
+
+  .active {
+    color: #dfbf8e;
+  }
+
+  .occupied {
+    color: #dfbf8e;
+  }
+
+  .focused {
+    color: #dfbf8e;
+  }
+  
+}
+
+.workspaces button:hover {
+  color: #dfbf8e;
+}
+
+button:hover {
+  color: #dfbf8e;
+}
+
+
+tooltip
+{
+    //background-color: #161320;
+    background-color: #282828;
+    font-size: 12px;
+}
+
+.end {
+  margin-right: 5px;
+}
+
+
+// Calendar
+.cal-box {
+  background-color: black;
+  font-family: Comic Mono;
+  font-size: 1em;
+  font-weight: bold;
+  border-radius: 20px;
+
+  .cal-inner-box {
+      padding: 1rem 1rem .2rem;
+    
+      .cal {
+          &.highlight {
+              padding: 10rem;
+          }
+          
+          padding: .8rem .25rem 0rem;
+          margin-left: 10px;
+      }
+    }
+
+}
+
+calendar:selected {
+  color: #dfbf8e;
+}
+
+calendar.header {
+color: #dfbf8e;
+font-weight: bold;
+}
+
+calendar.button {
+  color: #dfbf8e;
+  &:hover {color: white;}
+}
+
+calendar.highlight {
+color: #dfbf8e;
+font-weight: bold;
+}
+
+calendar:indeterminate {
+color: $background;
+
+}
+
+
+.btns-layout {
+  font-size: 1.8em;
+
+  
+  button {
+    padding: 0.4em;
+    border-radius: 0.3em;
+    background-color: rgba(#282828, 1);
+
+
+    &:hover {
+      transition: 200ms linear background-color, border-radius;
+      color:#fcdee3;
+      background-color: rgba(#689d6a, 1);
+    }
+
+  }
+}

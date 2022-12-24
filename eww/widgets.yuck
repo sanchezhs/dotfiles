@@ -1,0 +1,377 @@
+(defwidget bar []
+  (box :orientation "h"
+       :space-evenly false
+       :class "bar"
+       :vexpand false
+  (box :halign "start"
+       :spacing 10
+       :hexpand true
+       :vexpand false
+       :space-evenly false
+       (arco)
+       (workspaces))
+
+  (box :halign "center"
+       :spacing 10
+       :hexpand true
+       :vexpand false
+       :space-evenly false
+       (time))
+
+  (box :halign "end"
+       :class "end"
+       :spacing 14
+       :hexpand true
+       :vexpand false
+       :space-evenly false
+       (battery_)
+       (brightness_)
+       (volume_ :on muted)
+       (network_  :strength net
+                  :essid essid_name
+        )
+       (mem_))
+  )
+  )
+
+
+
+
+(defwidget arco []
+  (box :class "arco"
+        (button :onclick "scripts/popup.sh layouts" ""))
+)
+
+
+; Wifi
+(defwidget network [strength essid]
+  (box :class "network"
+       :space-evenly false
+       :spacing 8
+       :tooltip "${essid} ${strength}%"
+    (metric :label "" :value strength :onchange "" :onclick '')
+))
+
+; Bateria
+(defwidget battery []
+    (box :class 'bateria' :tooltip "Batería: ${EWW_BATTERY.BAT0.capacity}"
+      (metric :label "" :value {EWW_BATTERY.BAT0.capacity} :onchange "" :onclick '')
+    )
+)
+
+; Hora
+(defwidget _time []
+  (label :class "time" :text time_poll)
+)
+
+; Brillo
+;:value "${((brightness_listen+0.0) / 19200)*100}"
+(defwidget brightness []
+  (box :class 'modulo' :tooltip "Brillo: ${current-brightness}%"
+    (metric :label ""
+            :value current-brightness
+            :onchange ""
+            :onclick ''
+    )
+  )
+)
+
+
+; Memoria
+(defwidget mem []
+  (box :class "modulo" :tooltip "Uso de ram: ${round(EWW_RAM.used_mem_perc,0)}%"
+    (metric :label "" :value {EWW_RAM.used_mem_perc} :onchange "" :onclick '')
+  )
+)
+
+
+; Volumen
+(defwidget volume [on]
+  (box :class 'modulo' :tooltip "Volumen: ${volume}%"
+  (metric :label {on == "[off]" ? "婢" : "墳"}
+          :value {on == "[off]" ? 0 : volume}
+          :onchange "amixer -D pulse sset Master {}%"
+          :onclick 'amixer set Master toggle')
+  )
+)
+
+
+; Escritorios
+(defwidget workspaces []
+  (literal :content workspaces_listen)  
+)
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;          BARRAS OCULTAS                   ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defwidget mem_ []
+  (box :class "battery_"
+       :orientation "h"
+       :space-evenly true
+       :halign "center"
+       :valign "center"
+       :tooltip "Uso de ram: ${round(EWW_RAM.used_mem_perc,0)}%"
+       (eventbox :onhover "${eww} update hover_mem=true"
+                 :onhoverlost "${eww} update hover_mem=false"
+                 (box :orientation "h"
+                      :space-evenly "false"
+                      :halign "start"
+                      :valign "center"
+                      (label :class "arc-label"
+                             :text ''
+                             :wrap "true")
+                      (revealer :reveal hover_mem
+                                :transition "slideright"
+                                :duration "0.5"
+                                (box :orientation "h"
+                                     :space-evenly "false"
+                                     :halign "start"
+                                     :valign "center"
+                                          (metric :label ''
+                                              :value {EWW_RAM.used_mem_perc}
+                                              :onchange ''
+                                              :onclick ''
+                                          )
+                                     ))))))         
+
+(defwidget network_ [strength essid]
+  (box :class "battery_"
+       :orientation "h"
+       :space-evenly true
+       :halign "center"
+       :valign "center"
+       :tooltip "${essid} ${strength}%"
+       (eventbox :onhover "${eww} update hover_net=true"
+                 :onhoverlost "${eww} update hover_net=false"
+                 (box :orientation "h"
+                      :space-evenly "false"
+                      :halign "start"
+                      :valign "center"
+                      (label :class "arc-label"
+                             :text {strength == "" ? "睊" : ""}
+                             :wrap "true")
+                      (revealer :reveal hover_net
+                                :transition "slideright"
+                                :duration "0.5"
+                                (box :orientation "h"
+                                     :space-evenly "false"
+                                     :halign "start"
+                                     :valign "center"
+                                          (metric :label ''
+                                              :value strength
+                                              :onchange ''
+                                              :onclick ''
+                                          )
+                                     ))))))         
+
+
+(defwidget volume_ [on]
+  (box :class "battery_"
+       :orientation "h"
+       :space-evenly true
+       :halign "center"
+       :valign "center"
+       :tooltip "Volumen: ${volume}%"
+       (eventbox :onhover "${eww} update hover_vol=true"
+                 :onhoverlost "${eww} update hover_vol=false"
+                 (box :orientation "h"
+                      :space-evenly "false"
+                      :halign "start"
+                      :valign "center"
+                      (button :class "arc-label"
+                              :onclick "amixer set Master toggle"
+                              {on == "[off]" ? "婢" : "墳"}
+                             )
+                      (revealer :reveal hover_vol
+                                :transition "slideright"
+                                :duration "0.5"
+                                (box :orientation "h"
+                                     :space-evenly "false"
+                                     :halign "start"
+                                     :valign "center"
+                                          (metric :label ''
+                                              :value {on == "[off]" ? 0 : volume}
+                                              :onchange "amixer -D pulse sset Master {}%"
+                                              :onclick 'amixer set Master toggle'
+                                          )
+                                     ))))))         
+
+
+
+
+(defwidget brightness_ []
+  (box :class "battery_"
+       :orientation "h"
+       :space-evenly true
+       :halign "center"
+       :valign "center"
+       :tooltip "Brillo: ${current-brightness}%"
+       (eventbox :onhover "${eww} update hover_bright=true"
+                 :onhoverlost "${eww} update hover_bright=false"
+                 (box :orientation "h"
+                      :space-evenly "false"
+                      :halign "start"
+                      :valign "center"
+                      (label :class "arc-label"
+                             :text ''
+                             :wrap "true")
+                      (revealer :reveal hover_bright
+                                :transition "slideright"
+                                :duration "0.5"
+                                (box :orientation "h"
+                                     :space-evenly "false"
+                                     :halign "start"
+                                     :valign "center"
+                                          (metric :label ""
+                                              :value current-brightness
+                                              :onchange ""
+                                              :onclick ''
+                                          )
+                                     ))))))         
+
+
+(defwidget battery_ []
+    (box :class "battery_"
+         :orientation "h"
+         :space-evenly true
+         :halign "center"
+         :valign "center"
+         :tooltip "Batería: ${EWW_BATTERY.BAT0.capacity}"
+         (eventbox :onhover "${eww} update hover_bat=true"
+                   :onhoverlost "${eww} update hover_bat=false"
+                   (box :orientation "h"
+                        :space-evenly "false"
+                        :halign "start"
+                        :valign "center"
+                        (label :class "arc-label"
+                               :text ''
+                               :wrap "true")
+                        (revealer :reveal hover_bat
+                                  :transition "slideright"
+                                  :duration "0.5"
+                                  (box :orientation "h"
+                                       :space-evenly "false"
+                                       :halign "start"
+                                       :valign "center"
+                                            (metric :label ""
+                                                :value {EWW_BATTERY.BAT0.capacity}
+                                                :onchange ""
+                                                :onclick ''
+                                            )
+                                       ))))))           
+
+
+;; Clock Widgets ;;
+(defwidget time []
+	(box	:orientation "h" 
+			:class "time" 
+			:valign "center"
+	(button	:onclick "scripts/popup.sh calendar"	
+			:class "time-hour" time_poll)
+	))
+
+;; Calendar Widgets ;;
+(defwidget cal []
+	(box :class "cal-box" 
+		 :orientation "v"
+	(box :class "cal-inner-box"
+	(calendar :class "cal" 
+			  :day calendar_day 
+			  :month calendar_month 
+			  :year calendar_year))))
+(defpoll calendar_day :interval "10h"
+    "date '+%d'")
+(defpoll calendar_month :interval "10h"
+    "scripts/calendar.sh")
+(defpoll calendar_year :interval "10h"
+    "date '+%Y'")
+
+
+
+(defwidget layout [tiled monocle tall reset] 
+  (box :class "btns-layout" :spacing 5 
+    :vexpand true :hexpand true
+    :valign "center" :halign "center"
+    :space-evenly false
+    (button :onclick tiled "Tiled")
+    (button :onclick monocle "Monocle")
+    (button :onclick tall  "Tall")
+    (button :onclick reset "Default")  
+  )
+)
+ 
+; Función para dibujar barras
+(defwidget metric [label value onchange onclick]
+  (box :orientation "h"
+       :class "metric"
+       :space-evenly false
+    (button :class "label" :onclick onclick label)         ; button en vez de box para hover
+    (scale :min 0
+           :max 101
+           :active {onchange != ""}
+           :value  {value == "" ? 0 : value}
+           :onchange onchange)))
+
+;;;;;;;;;;;;;;;;;;;;;;
+;     SIN USAR       ;
+;;;;;;;;;;;;;;;;;;;;;;
+; Musica
+;(defwidget music []
+;  (box :class "music"
+;       :orientation "h"
+;       :space-evenly false
+;       :halign "center"
+;    {music != "" ? "🎵${music}" : ""}))
+;
+;(defwidget battery_ []
+;    (box :class "battery_"
+;         :orientation "h"
+;         :space-evenly true
+;         :halign "center"
+;         :valign "center"
+;         
+;         (eventbox :onhover "${eww} update hover_mus=true"
+;                   :onhoverlost "${eww} update hover_mus=false"
+;                   (box :orientation "h"
+;                        :space-evenly "false"
+;                        :halign "start"
+;                        :valign "center"
+;                        (label :class "arc-label"
+;                               :text 'BAT'
+;                               :wrap "true")
+;                        (revealer :reveal hover_mus
+;                                  :transition "slideright"
+;                                  :duration "0.5"
+;                                  (box :orientation "h"
+;                                       :space-evenly "false"
+;                                       :halign "start"
+;                                       :valign "center"
+;                                            (metric :label ""
+;                                                :value {EWW_BATTERY.BAT0.capacity}
+;                                                :onchange ""
+;                                            )
+;                                       ))))))
+;
+; Bateria
+;(defwidget _battery [charge status]
+;  (box :class "bat-box" :space-evenly false :spacing 8
+;    (label :text {status == 'Charging' ? charge :
+;      charge < 15 ? "" :
+;        charge < 30 ? "" :
+;          charge < 45 ? "" :
+;            charge < 60 ? "" :
+;              charge < 75 ? "" :
+;                charge < 95 ? "" : ""})))
+; Disco
+;(defwidget disk []
+;  (box :class 'modulo' :tooltip "Uso: ${round((1 - (EWW_DISK["/"].free / EWW_DISK["/"].total)) * 100, 0)}%"
+;    (metric :label "Disk"
+;            :value {round((1 - (EWW_DISK["/"].free / EWW_DISK["/"].total)) * 100, 0)}
+;            :onchange ""
+;            :onclick ''
+;    )
+;  )
+;)

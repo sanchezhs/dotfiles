@@ -1,0 +1,43 @@
+(defwindow layout_switch
+  :stacking "fg"
+  :windowtype "normal"
+  :wm-ignore true
+  :geometry (geometry
+              :width "10%"
+              :height "10%"
+              :anchor "center")
+
+ 
+    (box :spacing 15 :class "tm-box" :space-evenly false :valign "center" :halign "center"      
+        
+        (layout :tiled    "bsp-layout set tiled $(wmctrl -d | grep -w '*' | awk 'NF>1{print $NF}')   &&  ~/eww/target/release/./eww close layout_switch"
+                :monocle  "bsp-layout set monocle $(wmctrl -d | grep -w '*' | awk 'NF>1{print $NF}') &&  ~/eww/target/release/./eww close layout_switch"
+                :tall     "bsp-layout set tall $(wmctrl -d | grep -w '*' | awk 'NF>1{print $NF}')    &&  ~/eww/target/release/./eww close layout_switch"
+                :reset    "bsp-layout remove $(wmctrl -d | grep -w '*' | awk 'NF>1{print $NF}')      &&  ~/eww/target/release/./eww close layout_switch"
+        )
+
+    )
+
+)
+
+
+(defvar var "`wmctrl -d | grep -w '*' | awk 'NF>1{print $NF}'`")
+
+(defwidget layout [tiled monocle tall reset] 
+
+    
+
+     (box :class "btns-box" :spacing 5 
+       :vexpand true :hexpand true
+       :valign "center" :halign "center"
+       :space-evenly false
+       
+       (button :onclick tiled "Tiled")
+       (button :onclick monocle "Monocle")
+       (button :onclick tall  "Tall")
+       (button :onclick reset "Default")
+
+       
+       )
+       
+)

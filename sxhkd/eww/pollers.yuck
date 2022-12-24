@@ -1,0 +1,20 @@
+(deflisten music :initial ""
+  "playerctl --follow metadata --format '{{ artist }} - {{ title }}' || true")
+
+(defpoll volume :interval "1s"
+  "scripts/getvol")
+
+(defpoll time_poll :interval "5s"
+  "date '+%H:%M %d-%m-%Y'")
+
+(defpoll essid_name :interval "100s" 
+  "./scripts/essid.sh"
+)
+
+(defpoll current-brightness :interval "1s" "brightnessctl -m -d intel_backlight | awk -F, '{print substr($4, 0, length($4)-1)}' | tr -d '%'")
+(defpoll muted :interval "1s" "amixer -D pulse sget Master | grep 'Left:' | awk 'NF{print $NF}'")
+
+(deflisten workspaces_listen "./scripts/workspaces.sh")
+(deflisten brightness_listen "./scripts/brillo.sh")
+(deflisten net "./scripts/wifi.sh")
+

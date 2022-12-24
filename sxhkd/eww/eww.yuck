@@ -1,0 +1,55 @@
+;pollers
+(include "pollers.yuck")
+
+;vars
+(include "vars.yuck")
+
+;widgets
+(include "widgets.yuck")
+
+
+(defwindow bar
+  :monitor 0
+  :windowtype "dock"
+  :hexpand false
+  :vexpand false
+  :geometry (geometry 
+                      :y "1px"
+                      :width "98%"
+                      :height "2px"
+                      :anchor "top center")
+  :reserve (struts :distance "5px" :side "top")
+  (bar))
+
+
+
+(defwindow calendar
+	:geometry (geometry :x "540px" 
+						:y "5%" 
+						:width "270px" 
+						:height "60px")
+(cal))
+
+
+(defwindow layout_switch
+  :stacking "fg"
+  :windowtype "normal"
+  :wm-ignore true
+  :geometry (geometry
+              :width "10%"
+              :height "10%"
+              :anchor "center")
+
+  
+    (box :spacing 15 :class "box-layout" :space-evenly false :valign "center" :halign "center"      
+        
+        (layout :tiled    "bsp-layout set tiled $(wmctrl -d | grep -w '*' | awk 'NF>1{print $NF}')   &&  ~/eww/target/release/./eww close layout_switch"
+                :monocle  "bsp-layout set monocle $(wmctrl -d | grep -w '*' | awk 'NF>1{print $NF}') &&  ~/eww/target/release/./eww close layout_switch"
+                :tall     "bsp-layout set tall $(wmctrl -d | grep -w '*' | awk 'NF>1{print $NF}')    &&  ~/eww/target/release/./eww close layout_switch"
+                :reset    "bsp-layout remove $(wmctrl -d | grep -w '*' | awk 'NF>1{print $NF}')      &&  ~/eww/target/release/./eww close layout_switch"
+        )
+
+    )
+
+)
+  
