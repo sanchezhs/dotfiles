@@ -1,5 +1,5 @@
 # Bspwm
-My laptop dotfiles config files including alacritty colorschemes, neovim and zsh.
+My laptop dotfiles config files including alacritty colorschemes, neovim, zsh...
 
 ![Alt text](./desktop1.png)
 
