@@ -1,1 +1,2 @@
-# My bspwm dotfiles config for my laptop
+# Bspwm
+My laptop dotfiles config files
